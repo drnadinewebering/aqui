@@ -1,0 +1,96 @@
+/* aquí - central product list.
+   One product, one entry, two names. This is the list the brief asks us to own
+   so the same thing never gets added twice under different spellings.
+   Brands link to these ids in brands.js (many to many). */
+
+window.PRODUCTS = [
+  { id: 'kimchi',            en: 'Kimchi',                  es: 'Kimchi' },
+  { id: 'kombucha',          en: 'Kombucha',                es: 'Kombucha' },
+  { id: 'sauerkraut',        en: 'Sauerkraut',              es: 'Chucrut' },
+  { id: 'sourdough',         en: 'Sourdough Bread',         es: 'Pan de masa madre' },
+  { id: 'water-kefir',       en: 'Water Kefir',             es: 'Kéfir de agua' },
+  { id: 'coconut-yogurt',    en: 'Coconut Yogurt',          es: 'Yogur de coco' },
+  { id: 'cacao-nibs',        en: 'Cacao Nibs',              es: 'Nibs de cacao' },
+  { id: 'chocolate-bar',     en: 'Dark Chocolate Bar',      es: 'Barra de chocolate oscuro' },
+  { id: 'cacao-paste',       en: 'Cacao Paste',             es: 'Pasta de cacao' },
+  { id: 'raw-honey',         en: 'Raw Honey',               es: 'Miel cruda' },
+  { id: 'granola',           en: 'Granola',                 es: 'Granola' },
+  { id: 'nut-butter',        en: 'Nut Butter',              es: 'Mantequilla de nueces' },
+  { id: 'hot-sauce',         en: 'Hot Sauce',               es: 'Salsa picante' },
+  { id: 'coffee',            en: 'Coffee Beans',            es: 'Café en grano' },
+  { id: 'herbal-tea',        en: 'Herbal Tea Blend',        es: 'Mezcla de té de hierbas' },
+  { id: 'hibiscus-tea',      en: 'Hibiscus Tea',            es: 'Té de flor de Jamaica' },
+  { id: 'lemongrass-tea',    en: 'Lemongrass Tea',          es: 'Té de hierba limón' },
+  { id: 'moringa',           en: 'Moringa Powder',          es: 'Moringa en polvo' },
+  { id: 'turmeric',          en: 'Turmeric Powder',         es: 'Cúrcuma en polvo' },
+  { id: 'tincture',          en: 'Herbal Tincture',         es: 'Tintura de hierbas' },
+  { id: 'elderberry',        en: 'Elderberry Syrup',        es: 'Jarabe de saúco' },
+  { id: 'essential-oil',     en: 'Essential Oil',           es: 'Aceite esencial' },
+  { id: 'face-serum',        en: 'Face Serum',              es: 'Sérum facial' },
+  { id: 'cleanser',          en: 'Facial Cleanser',         es: 'Limpiador facial' },
+  { id: 'body-butter',       en: 'Body Butter',             es: 'Manteca corporal' },
+  { id: 'body-oil',          en: 'Body Oil',                es: 'Aceite corporal' },
+  { id: 'soap',              en: 'Natural Soap',            es: 'Jabón natural' },
+  { id: 'shampoo-bar',       en: 'Shampoo Bar',             es: 'Shampoo en barra' },
+  { id: 'conditioner-bar',   en: 'Conditioner Bar',         es: 'Acondicionador en barra' },
+  { id: 'deodorant',         en: 'Natural Deodorant',       es: 'Desodorante natural' },
+  { id: 'lip-balm',          en: 'Lip Balm',                es: 'Bálsamo labial' },
+  { id: 'sunscreen',         en: 'Mineral Sunscreen',       es: 'Protector solar mineral' },
+  { id: 'menstrual-cup',     en: 'Menstrual Cup',           es: 'Copa menstrual' },
+  { id: 'cloth-pads',        en: 'Cloth Pads',              es: 'Toallas de tela' },
+  { id: 'period-underwear',  en: 'Period Underwear',        es: 'Ropa interior menstrual' },
+  { id: 'intimate-wash',     en: 'Intimate Wash',           es: 'Jabón íntimo' },
+  { id: 'beeswax-candle',    en: 'Beeswax Candle',          es: 'Vela de cera de abeja' },
+  { id: 'soy-candle',        en: 'Soy Candle',              es: 'Vela de soya' },
+  { id: 'incense',           en: 'Incense',                 es: 'Incienso' },
+  { id: 'palo-santo',        en: 'Palo Santo',              es: 'Palo santo' },
+  { id: 'room-spray',        en: 'Room Spray',              es: 'Espray de ambiente' },
+  { id: 'macrame',           en: 'Macramé Wall Hanging',    es: 'Macramé de pared' },
+  { id: 'basket',            en: 'Woven Basket',            es: 'Canasta tejida' },
+  { id: 'ceramic-mug',       en: 'Ceramic Mug',             es: 'Taza de cerámica' },
+  { id: 'cutting-board',     en: 'Wooden Cutting Board',    es: 'Tabla de picar de madera' },
+  { id: 'cotton-throw',      en: 'Cotton Throw',            es: 'Manta de algodón' },
+  { id: 'baby-balm',         en: 'Baby Balm',               es: 'Bálsamo para bebé' },
+  { id: 'kids-clothing',     en: 'Kids Clothing',           es: 'Ropa para niños' },
+  { id: 'cloth-diapers',     en: 'Cloth Diapers',           es: 'Pañales de tela' },
+  { id: 'wooden-toy',        en: 'Wooden Toy',              es: 'Juguete de madera' },
+  /* added 24 Sep 2026 with the first real brand, Castel Woodshop */
+  { id: 'serving-tray',      en: 'Carved Serving Tray',     es: 'Bandeja tallada' },
+  { id: 'beer-carrier',      en: 'Beer Carrier',            es: 'Portacervezas' },
+  { id: 'liquor-dispenser',  en: 'Liquor Dispenser',        es: 'Dispensador de licor' },
+  { id: 'wine-rack',         en: 'Wine Rack',               es: 'Vinera' },
+  { id: 'custom-wood',       en: 'Custom Wood Pieces',      es: 'Piezas de madera a medida' },
+  /* added 2 Oct 2026 with Tierra Viva, natural cosmetics and cleaners.
+     The Spanish names are a first draft and wait for a native check.
+     Body Butter and Natural Deodorant are reused from above, not added twice.
+     Home Care and Skincare are broad terms; they are here because Tierra Viva
+     lists them on its own profile. */
+  { id: 'bar-soap',             en: 'Bar Soap',              es: 'Jabón en barra' },
+  { id: 'liquid-soap',          en: 'Liquid Soap',           es: 'Jabón líquido' },
+  { id: 'all-purpose-cleaner',  en: 'All Purpose Cleaner',   es: 'Limpiador multiusos' },
+  { id: 'laundry-soap',         en: 'Laundry Soap',          es: 'Jabón para ropa' },
+  { id: 'toilet-spray',         en: 'Toilet Spray',          es: 'Espray para inodoro' },
+  { id: 'bug-repellent',        en: 'Bug Repellent',         es: 'Repelente de insectos' },
+  { id: 'board-butter',         en: 'Board Butter',          es: 'Manteca para tablas de madera' },
+  { id: 'dishwasher-soap',      en: 'Dishwasher Soap',       es: 'Jabón lavaplatos' },
+  { id: 'toothpaste',           en: 'Toothpaste',            es: 'Pasta dental' },
+  { id: 'foot-soak-salts',      en: 'Foot Soak Salts',       es: 'Sales para baño de pies' },
+  { id: 'essential-oil-roller', en: 'Essential Oil Rollers', es: 'Roll-ons de aceites esenciales' },
+  { id: 'home-care',            en: 'Home Care',             es: 'Cuidado del hogar' },
+  { id: 'skincare',             en: 'Skincare',              es: 'Cuidado de la piel' },
+  /* added 2 Oct 2026 with Deli Saludable, healthy artisan food and drinks.
+     Spanish names follow the brand's own form where it wrote Spanish. The
+     English names, and Crema para untar, are a first draft and wait for a native
+     check. Hot Sauce and Kombucha are reused from above, not added twice. */
+  { id: 'jam',                  en: 'Jam & Marmalade',       es: 'Mermelada' },
+  { id: 'spread',               en: 'Spread',                es: 'Crema para untar' },
+  { id: 'healthy-snacks',       en: 'Healthy Snacks',        es: 'Snacks saludables' },
+  { id: 'pesto',                en: 'Pesto',                 es: 'Pesto' },
+  { id: 'chimichurri',          en: 'Chimichurri',           es: 'Chimichurri' },
+  { id: 'tomato-sauce',         en: 'Tomato Sauce',          es: 'Salsa de tomate' },
+  { id: 'dried-tomatoes',       en: 'Dried Tomatoes in Extra Virgin Olive Oil',
+                                 es: 'Tomates deshidratados en aceite de oliva virgen extra' },
+  { id: 'apple-cider-vinegar',  en: 'Apple Cider Vinegar',   es: 'Vinagre de manzana' },
+  { id: 'bone-broth',           en: 'Bone Broth',            es: 'Caldo de huesos' },
+  { id: 'coffee-liqueur',       en: 'Coffee Liqueur',        es: 'Licor de café' }
+];

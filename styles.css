@@ -1,0 +1,436 @@
+/* aquí - all styling lives in this one file.
+   Look (14 Oct 2026): pure white ground and white cards, per Nadine's request. The line icons keep their own warm grey brown. */
+
+:root{
+  --ground:#FFFFFF;    /* page background: white */
+  --paper:#FFFFFF;     /* cards, inputs, tab bar */
+  --paper-2:#F6F6F5;   /* pressed and hover fill */
+  --chip:#EEE9E3;      /* product pills, logo circle, quiet fills */
+  --ink:#2F2C29;       /* headings and main text */
+  --ink-2:#55504A;     /* body text */
+  --muted:#766E66;     /* labels, hints (4.5 to 1 on the ground) */
+  --line:#E3DED7;
+  --line-soft:#ECE7E0;
+  --btn:#7D7268;       /* every button: filled, selected and outlined */
+  --icon:#2F4035;      /* dark green line icons on the brand profile */
+  --shadow:0 1px 2px rgba(47,44,41,.05), 0 8px 24px rgba(47,44,41,.06);
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --r:14px;
+  --tab-h:80px;
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--ground);
+  color:var(--ink-2);
+  font:16px/1.55 var(--sans);
+  -webkit-font-smoothing:antialiased;
+  /* a long unbroken string (for example words joined by slashes in a brand's
+     own text) wraps instead of pushing the page wider than the screen */
+  overflow-wrap:break-word;
+}
+img{max-width:100%;display:block}
+button{font:inherit;color:inherit}
+a{color:var(--ink);text-decoration:none}
+
+.shell{
+  max-width:460px;margin:0 auto;min-height:100vh;
+  background:var(--ground);
+  padding-bottom:calc(var(--tab-h) + env(safe-area-inset-bottom));
+  position:relative;
+}
+@media (min-width:900px){
+  .shell{box-shadow:0 0 60px rgba(47,44,41,.07)}
+}
+
+/* ---------- top bar ---------- */
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px 20px 10px;
+}
+.brandmark{display:flex;align-items:center;min-height:42px}
+.logo-img{height:42px;width:auto}
+.logo-type{
+  font:400 30px/1 Georgia,"Times New Roman",serif;
+  color:var(--ink);letter-spacing:.01em;
+}
+.lang{display:flex;align-items:center;gap:8px}
+.lang-btn{
+  background:none;border:0;padding:4px 2px;cursor:pointer;
+  font-size:13px;letter-spacing:.09em;color:var(--muted);
+}
+.lang-btn.on{color:var(--ink);font-weight:600}
+.lang-sep{width:1px;height:12px;background:var(--line)}
+
+/* ---------- home hero photo ---------- */
+.hero-photo{
+  /* full width: runs to both edges of the screen, past the page padding */
+  margin:6px -20px 18px;overflow:hidden;
+  border-radius:0;border:0;background:var(--paper-2);
+  aspect-ratio:3/1;max-width:none;
+}
+.hero-photo img{
+  width:100%;height:100%;object-fit:cover;object-position:center;display:block;
+}
+
+/* ---------- generic page bits ---------- */
+main{padding:0 20px 32px;outline:none}
+.page-title{
+  font:400 26px/1.25 Georgia,"Times New Roman",serif;
+  color:var(--ink);margin:6px 0 4px;
+}
+.page-sub{margin:0 0 20px;color:var(--muted);font-size:14px}
+.section-label{
+  font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);margin:26px 0 10px;
+}
+.hint{font-size:12.5px;color:var(--muted);margin:8px 0 0}
+.back{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:14px;color:var(--ink);margin:0 0 12px;
+  background:none;border:0;padding:6px 0;cursor:pointer;
+}
+.back-chev{width:11px;height:18px;transform:rotate(180deg)}
+
+/* ---------- form controls ---------- */
+.field{margin-bottom:14px;position:relative}
+.field label{
+  display:block;font-size:11px;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:7px;
+}
+.input-wrap{position:relative;display:flex;align-items:center}
+.input-wrap .lead-icon{
+  position:absolute;left:14px;width:27px;height:27px;opacity:.55;pointer-events:none;
+}
+input[type=text]{
+  width:100%;padding:13px 14px;border:1px solid var(--line);
+  border-radius:var(--r);background:var(--paper);color:var(--ink);
+  font-size:15px;appearance:none;
+}
+input[type=text].with-icon{padding-left:52px}
+input[type=text]:focus{outline:none;border-color:var(--ink-2);background:var(--paper)}
+input::placeholder{color:#A39A91}
+
+.geo-btn{
+  margin-top:8px;display:inline-flex;align-items:center;gap:7px;
+  background:none;border:1px solid var(--line);border-radius:999px;
+  padding:7px 13px;font-size:13px;color:var(--btn);cursor:pointer;
+}
+.geo-btn:active{background:var(--paper-2)}
+.geo-btn img{width:22px;height:22px;opacity:.6}
+.geo-btn[disabled]{opacity:.55}
+.geo-msg{font-size:12.5px;color:var(--muted);margin-top:7px}
+
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{
+  border:1px solid var(--line);background:var(--paper);
+  border-radius:999px;padding:8px 15px;font-size:14px;
+  color:var(--ink-2);cursor:pointer;
+}
+.chip.on{background:var(--btn);border-color:var(--btn);color:#fff}
+
+.toggle-row{
+  display:flex;align-items:center;gap:12px;
+  border:0;background:#ede2d6;
+  border-radius:var(--r);padding:12px 14px;cursor:pointer;
+}
+.toggle-row img{width:72px;height:72px;opacity:.85;flex:none;margin:-14px -10px -14px -12px}
+.toggle-row .t-text{flex:1;min-width:0}
+.toggle-row .t-text b{display:block;font-weight:600;color:var(--ink);font-size:14.5px}
+.toggle-row .t-text span{font-size:12.5px;color:var(--muted)}
+.switch{
+  width:44px;height:26px;border-radius:999px;background:#cdbfae;
+  position:relative;flex:none;transition:background .15s;
+}
+.switch::after{
+  content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;
+  border-radius:50%;background:#fff;transition:transform .15s;
+  box-shadow:0 1px 3px rgba(47,44,41,.25);
+}
+.toggle-row.on .switch{background:var(--btn)}
+.toggle-row.on .switch::after{transform:translateX(18px)}
+
+.btn{
+  width:100%;padding:14px;border:0;border-radius:var(--r);
+  background:var(--btn);color:#fff;font-size:15px;font-weight:600;
+  cursor:pointer;letter-spacing:.01em;
+}
+.btn:active{opacity:.9}
+.btn-quiet{
+  background:none;border:1px solid var(--btn);color:var(--btn);font-weight:500;
+}
+.geo-msg.warn{color:#9b3d2e;font-weight:600}
+/* a link styled as the main button (the brand form opens outside the app) */
+a.btn-link{display:block;text-align:center;color:#fff;margin-top:6px}
+
+/* ---------- autocomplete ---------- */
+.ac{
+  position:absolute;top:calc(100% + 6px);left:0;right:0;z-index:40;
+  background:var(--paper);border:1px solid var(--line);border-radius:var(--r);
+  box-shadow:var(--shadow);overflow:hidden;max-height:262px;overflow-y:auto;
+}
+.ac div{padding:11px 14px;font-size:14.5px;cursor:pointer;border-bottom:1px solid var(--line-soft)}
+.ac div:last-child{border-bottom:0}
+.ac div:hover,.ac div.hi{background:var(--paper-2)}
+.ac .ac-empty{cursor:default;color:var(--ink-2);line-height:1.4}
+.ac .ac-empty:hover{background:transparent}
+.ac .ac-note{font-size:11.5px;color:var(--muted);display:block}
+
+/* ---------- category grid ---------- */
+/* One card per category: photo across the top, a paper strip below it holding
+   the name and a chevron. Built to match the layout Nadine drew.
+   The photo box keeps a fixed shape whether it holds a real photo or, until
+   one exists, the category line icon on the white card. */
+.cat-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.cat{
+  display:flex;flex-direction:column;align-items:stretch;
+  background:var(--paper);border:0;padding:0;margin:0;
+  border-radius:var(--r);overflow:hidden;
+  text-align:left;cursor:pointer;
+  transition:transform .12s ease, background .12s ease;
+}
+.cat:active{background:var(--paper-2);transform:scale(.99)}
+.cat-thumb{
+  width:100%;aspect-ratio:15/7;overflow:hidden;background:var(--paper);
+  display:flex;align-items:center;justify-content:center;
+}
+.cat-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+/* no photo yet: the icon holds the same space, with a hairline so the card
+   still reads as photo above, name below */
+.cat-thumb.is-icon{border-bottom:1px solid var(--line-soft)}
+.cat-thumb.is-icon img{width:56px;height:56px;object-fit:contain;opacity:.75}
+/* min-height holds two lines of the name so cards in a row end level */
+.cat-label{
+  display:flex;align-items:center;gap:8px;
+  padding:11px 12px 12px;min-height:62px;
+}
+.cat-name{flex:1;font-size:13.5px;line-height:1.32;color:var(--ink)}
+.cat-chev{flex:none;width:11px;height:18px;opacity:.55}
+
+.btn-chev{display:flex;align-items:center;justify-content:center;gap:7px}
+.btn-chev-icon{width:10px;height:16px;opacity:.5}
+
+/* ---------- brand cards ---------- */
+.results-head{
+  display:flex;align-items:baseline;justify-content:space-between;gap:10px;
+  margin:4px 0 14px;
+}
+.results-head h2{font:400 20px/1.3 Georgia,serif;color:var(--ink);margin:0}
+.count{font-size:13px;color:var(--muted);white-space:nowrap}
+
+.card{
+  display:flex;gap:13px;align-items:stretch;
+  background:var(--paper);border:1px solid var(--line-soft);border-radius:var(--r);
+  padding:13px;margin-bottom:11px;cursor:pointer;
+}
+.card:active{background:var(--paper-2)}
+.thumb{
+  width:74px;height:74px;flex:none;border-radius:11px;
+  background:var(--chip);display:flex;align-items:center;justify-content:center;
+}
+.thumb img{width:58px;height:58px;opacity:.8}
+/* a brand with a real photo fills the tile with it */
+.thumb.has-photo{overflow:hidden;background:var(--paper)}
+.thumb.has-photo img{width:100%;height:100%;object-fit:cover;opacity:1}
+/* a brand logo sits whole inside the tile, never cropped */
+.thumb.has-logo{overflow:hidden;background:var(--paper);border:1px solid var(--line-soft)}
+.thumb.has-logo img{width:100%;height:100%;object-fit:contain;opacity:1}
+.card-body{min-width:0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.card-body h3{margin:0 0 3px;font-size:15.5px;color:var(--ink);font-weight:600}
+.card-body p{margin:0;font-size:13px;color:var(--muted);line-height:1.4}
+.why{
+  margin-top:6px;display:flex;flex-wrap:wrap;gap:5px;
+}
+.tag{
+  font-size:11.5px;border:1px solid var(--line);border-radius:999px;
+  padding:2px 8px;color:var(--ink-2);background:var(--paper);
+}
+.tag.solid{background:var(--chip);border-color:var(--chip)}
+/* invented placeholder brands carry this so nobody mistakes them for real ones */
+.tag.example{border-style:dashed;color:var(--muted);background:none}
+
+/* ---------- empty state ---------- */
+.empty{
+  background:var(--paper);border:1px solid var(--line-soft);border-radius:var(--r);
+  padding:22px 18px;text-align:center;
+}
+.empty h3{margin:0 0 6px;font:400 18px/1.3 Georgia,serif;color:var(--ink)}
+.empty p{margin:0 0 14px;font-size:14px;color:var(--muted)}
+.empty .btn{margin-bottom:8px}
+
+/* ---------- brand profile ----------
+   Follows Nadine's profile mockup (Oct 2026): wide hero, round logo beside the
+   name, About, Product Examples, Products, two rows (Where to buy, Shipping),
+   then round buttons to find the brand. Headings on this page use the bold
+   sans from the mockup; the other pages keep the serif. */
+.hero{
+  /* full width, edge to edge, same as the Home hero */
+  aspect-ratio:3/1;border-radius:0;overflow:hidden;margin:0 -20px 20px;
+  background:var(--chip);
+  display:flex;align-items:center;justify-content:center;
+}
+.hero img{width:68px;height:68px;opacity:.7}
+/* a brand photo fills the wide box; object-position can be set per brand */
+.hero.has-photo img{width:100%;height:100%;object-fit:cover;opacity:1}
+
+.brand-head{display:flex;align-items:center;gap:16px;margin:0 0 26px}
+.brand-logo{
+  width:72px;height:72px;flex:none;border-radius:50%;overflow:hidden;
+  background:var(--chip);
+  display:flex;align-items:center;justify-content:center;
+}
+.brand-logo img{width:100%;height:100%;object-fit:cover}
+/* no logo file yet: the initials sit in a tinted circle */
+.brand-logo.mono{
+  font:400 22px/1 Georgia,"Times New Roman",serif;letter-spacing:.08em;color:var(--ink-2);
+}
+.brand-head-text{min-width:0}
+.brand-name{font:700 22px/1.2 var(--sans);color:var(--ink);margin:0 0 6px;overflow-wrap:anywhere;text-wrap:balance}
+.brand-loc{
+  display:flex;align-items:flex-start;gap:6px;
+  font-size:14px;line-height:1.35;color:var(--ink-2);margin:0 0 3px;
+}
+.brand-loc svg{width:22px;height:22px;flex:none;margin-top:1px;color:var(--icon)}
+.brand-cat{font-size:14px;line-height:1.35;color:var(--ink-2);margin:0}
+.brand-cat span{display:block}
+.brand-flags{margin-top:7px}
+
+.sec{margin:0 0 26px}
+.sec h2{font:700 16px/1.3 var(--sans);color:var(--ink);margin:0 0 9px}
+.about{font-size:14.5px;line-height:1.65}
+.about p{margin:0 0 10px}
+.about p:last-child{margin-bottom:0}
+
+/* Product Examples: four across, more scroll sideways. The row runs to the
+   screen edge, so a sliver of the next photo shows when there are more than
+   four. Tap a photo to see it full screen. */
+.examples{
+  display:grid;grid-auto-flow:column;grid-auto-columns:calc((100% - 24px) / 4);gap:8px;
+  overflow-x:auto;margin:0 -20px;padding:0 20px;scroll-padding:0 20px;
+  scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;scrollbar-width:none;
+}
+.examples::-webkit-scrollbar{display:none}
+.g-item{
+  display:block;width:100%;aspect-ratio:1.07/1;border-radius:12px;overflow:hidden;
+  border:0;padding:0;background:var(--chip);cursor:pointer;scroll-snap-align:start;
+}
+.g-item img{width:100%;height:100%;object-fit:cover;display:block}
+
+.pills{display:flex;flex-wrap:wrap;gap:8px}
+.pill{
+  background:var(--chip);color:var(--ink);font-size:13.5px;line-height:1.2;
+  padding:9px 15px;border-radius:999px;
+  max-width:100%;overflow-wrap:anywhere;
+}
+
+/* Where to buy: a heading, then one row per point of sale and a Shipping row.
+   A row with more to show opens in place. */
+.rows{border-top:1px solid var(--line);margin:0}
+.row{border-bottom:1px solid var(--line)}
+.row-top{
+  display:flex;align-items:center;gap:14px;width:100%;
+  background:none;border:0;margin:0;padding:15px 0;text-align:left;color:inherit;font:inherit;
+}
+button.row-top{cursor:pointer}
+.row-icon{width:36px;height:36px;flex:none;color:var(--icon)}
+.row-icon svg{width:100%;height:100%;display:block}
+.row-text{flex:1;min-width:0}
+.row-text b{display:block;font:700 14px/1.3 var(--sans);color:var(--ink);margin:0 0 3px}
+.row-text span{display:block;font-size:14px;line-height:1.4;color:var(--ink-2)}
+.row-chev{width:11px;height:18px;flex:none;color:var(--ink-2);transition:transform .18s ease}
+.row.open .row-chev{transform:rotate(90deg)}
+.row-detail{padding:0 0 16px 40px}
+.row-detail[hidden]{display:none}
+.row-detail span{display:block;font-size:13.5px;line-height:1.5;color:var(--ink-2)}
+
+/* Find this brand: round buttons with a label under each */
+.find{display:flex;flex-wrap:wrap;gap:10px 14px}
+.find a{
+  display:flex;flex-direction:column;align-items:center;gap:7px;
+  width:84px;font-size:13px;line-height:1.2;color:var(--ink-2);
+}
+.find-dot{
+  width:72px;height:72px;border-radius:50%;background:var(--btn);
+  display:flex;align-items:center;justify-content:center;
+}
+.find-dot svg{width:36px;height:36px;color:#fff}
+.find a:active .find-dot{background:#6B6159}
+
+/* ---------- content pages (mission, legal) ---------- */
+.lead{
+  font:400 17px/1.55 Georgia,serif;color:var(--ink);
+  background:var(--paper);border:1px solid var(--line-soft);
+  border-radius:var(--r);padding:16px 17px;margin:0 0 22px;
+}
+.doc h3{
+  font:400 17px/1.35 Georgia,serif;color:var(--ink);
+  margin:22px 0 7px;
+}
+.doc p{margin:0 0 11px;font-size:14.5px;line-height:1.62}
+.updated{font-size:12.5px;color:var(--muted);margin:0 0 18px}
+.legal-list{display:flex;flex-direction:column;gap:10px}
+.legal-item{
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--paper);border:1px solid var(--line-soft);
+  border-radius:var(--r);padding:15px 16px;cursor:pointer;
+}
+.legal-item b{font-weight:600;color:var(--ink);font-size:15px;display:block}
+.legal-item span{font-size:12.5px;color:var(--muted)}
+.legal-item::after{content:"›";color:var(--muted);font-size:20px;line-height:1;padding-left:10px}
+
+.mini-foot{
+  margin-top:30px;padding-top:16px;border-top:1px solid var(--line-soft);
+  display:flex;flex-wrap:wrap;justify-content:space-around;gap:10px 14px;font-size:14.5px;
+}
+.mini-foot a{color:var(--ink-2)}
+
+/* ---------- home mission teaser ---------- */
+.teaser{
+  display:flex;align-items:center;gap:13px;
+  background:#ede2d6;border:0;
+  border-radius:var(--r);padding:15px;margin-top:24px;cursor:pointer;
+}
+a.teaser{color:inherit;text-decoration:none}
+.teaser img{width:84px;height:84px;opacity:.85;flex:none;margin:-14px -8px -14px -12px}
+.teaser b{display:block;font:400 17px/1.3 Georgia,serif;color:var(--ink);font-weight:400}
+.teaser span{font-size:12.5px;color:var(--muted)}
+
+/* ---------- tab bar ---------- */
+.tabbar{
+  position:fixed;bottom:0;left:0;right:0;height:calc(var(--tab-h) + env(safe-area-inset-bottom));
+  padding-bottom:env(safe-area-inset-bottom);
+  max-width:460px;margin:0 auto;
+  background:var(--btn);
+  display:flex;align-items:center;z-index:50;
+}
+.tab{
+  flex:1;background:none;border:0;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+  padding:8px 2px;color:rgba(255,255,255,.68);font-size:14px;letter-spacing:.01em;
+}
+.tab svg{width:34px;height:34px}
+.tab.on{color:#fff}
+
+/* ---------- full screen photo ---------- */
+.lightbox{
+  position:fixed;inset:0;z-index:100;
+  background:rgba(38,30,24,.94);
+  display:flex;align-items:center;justify-content:center;
+  padding:24px;cursor:zoom-out;
+}
+.lightbox img{max-width:100%;max-height:100%;object-fit:contain;border-radius:8px}
+.lb-close{
+  position:absolute;top:10px;right:12px;background:none;border:0;
+  color:#fff;font-size:30px;line-height:1;padding:8px 10px;cursor:pointer;opacity:.85;
+}
+
+/* ---------- demo ribbon ---------- */
+.demo-note{
+  background:var(--paper);border:1px dashed var(--line);
+  border-radius:var(--r);padding:11px 14px;margin:0 0 18px;
+  font-size:12.5px;color:var(--muted);
+}
+
+/* shop location link inside an opened Where to buy row */
+.map-link{display:inline-block;margin-top:8px;font-size:14px;font-weight:600;color:var(--btn);text-decoration:underline;text-underline-offset:3px}
