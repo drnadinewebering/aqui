@@ -10,6 +10,11 @@ window.PRODUCTS = [
   { id: 'sourdough',         en: 'Sourdough Bread',         es: 'Pan de masa madre' },
   { id: 'water-kefir',       en: 'Water Kefir',             es: 'Kéfir de agua' },
   { id: 'coconut-yogurt',    en: 'Coconut Yogurt',          es: 'Yogur de coco' },
+  /* CIAGUA: products not yet represented in the central catalog. */
+  { id: 'ceremonial-cacao',  en: 'Ceremonial Cacao',       es: 'Cacao ceremonial' },
+  { id: 'brownie',          en: 'Brownie',               es: 'Brownie' },
+  { id: 'alfajor',          en: 'Alfajor',               es: 'Alfajor' },
+  { id: 'baking-chocolate', en: 'Baking Chocolate',      es: 'Chocolate para repostería' },
   { id: 'cacao-nibs',        en: 'Cacao Nibs',              es: 'Nibs de cacao' },
   { id: 'chocolate-bar',     en: 'Dark Chocolate Bar',      es: 'Barra de chocolate oscuro' },
   { id: 'cacao-paste',       en: 'Cacao Paste',             es: 'Pasta de cacao' },

@@ -636,4 +636,34 @@ window.BRANDS = [
     logo: "deli-saludable-logo.png",
     published: true
   }
+  ,{
+    /* CIAGUA, form submitted 6 Oct 2026. The brand did not specify its
+       production location. Red Barn is the only named retail point; its
+       location and maps link are reused from Tierra Viva's existing entry.
+       The form also mentions orders, but does not identify another shop. */
+    slug: "ciagua",
+    name: "CIAGUA",
+    tagline: {
+      en: "Panamanian cacao, from origin to innovation",
+      es: "Cacao panameño, del origen a la innovación"
+    },
+    about: {
+      en: "CIAGUA is a Panamanian cacao house dedicated to revealing and developing cacao's potential through science, origin and innovation. We work with cacao from different regions of Panama and offer experiences. Beyond an ingredient or product category, we see cacao as a source of biodiversity, knowledge, culture and innovation.",
+      es: "CIAGUA es una casa panameña de cacao dedicada a revelar y desarrollar el potencial del cacao a través de la ciencia, el origen y la innovación. Trabajamos cacao de diferentes zonas de Panamá y ofrecemos experiencias. Más allá de un ingrediente o una categoría de producto, vemos el cacao como una fuente de biodiversidad, conocimiento, cultura e innovación."
+    },
+    categories: ["food"],
+    products: ["chocolate-bar", "ceremonial-cacao", "cacao-nibs", "brownie", "alfajor", "baking-chocolate"],
+    pos: [
+      { name: "The Red Barn",
+        maps: "https://www.google.com/maps/place/Red+Barn/@8.5440563,-79.9126136,17z/data=!3m1!4b1!4m6!3m5!1s0x8facef0061e03d49:0x5bf280c8ad82e151!8m2!3d8.5440563!4d-79.9126136",
+        town: "Coronado", townEs: "Coronado", province: "Panamá Oeste", lat: 8.5333, lng: -79.9500 }
+    ],
+    shipping: { type: "none", provinces: [] },
+    links: { website: "", instagram: "ciagua.lab", whatsapp: "+507 6479 3976" },
+    photo: "ciagua-1.jpg",
+    hero: "ciagua-hero.jpg",
+    photos: ["ciagua-1.jpg", "ciagua-2.jpg", "ciagua-3.jpg", "ciagua-4.jpg"],
+    logo: "ciagua-logo.jpg",
+    published: true
+  }
 ];
