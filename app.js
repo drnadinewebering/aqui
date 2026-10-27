@@ -532,11 +532,54 @@ function viewHome() {
   wireCatPhotos();
 }
 
+function viewMap() {
+  var es = state.lang === 'es';
+  var place = state.placeId ? placeById(state.placeId) : null;
+  var locations = [];
+  BRANDS.filter(function (b) { return b.published && !b.demo; }).forEach(function (b) {
+    if (state.productId && b.products.indexOf(state.productId) < 0) return;
+    if (state.categoryId && b.categories.indexOf(state.categoryId) < 0) return;
+    b.pos.forEach(function (p) {
+      if (!p.positionVerified || typeof p.lat !== 'number' || typeof p.lng !== 'number') return;
+      if (place && distance(place, p) > state.radius) return;
+      var entry = locations.find(function (item) { return item.pos.id === p.id; });
+      if (!entry) { entry = { pos: p, brands: [] }; locations.push(entry); }
+      entry.brands.push(b);
+    });
+  });
+  render('<h1 class="page-title">' + (es ? 'Puntos de venta' : 'Retail locations') + '</h1>' +
+    '<p class="page-sub">' + (place ? esc(placeName(place)) + ' · ' + state.radius + ' km' :
+      (es ? 'Todos los puntos de venta' : 'All retail locations')) + '</p>' +
+    '<a class="btn btn-quiet" href="#/results">' + (es ? 'Lista' : 'List') + '</a>' +
+    '<a class="btn btn-quiet" href="#/nearby">' + (es ? 'Cambiar lugar o radio' : 'Change place or radius') + '</a>' +
+    (!locations.length ? '<p class="hint">' + (es ? 'No hay puntos de venta en este radio. Amplía el radio de búsqueda.' :
+      'No retail locations in this radius. Widen your search radius.') + '</p>' : '') +
+    '<p id="mapStatus" class="hint" role="status"></p><div id="retailMap" style="height:440px;max-height:65vh;z-index:0;margin:16px 0" aria-label="' +
+    (es ? 'Mapa de puntos de venta' : 'Retail locations map') + '"></div>' + footerHTML());
+  if (!window.L) { el('mapStatus').textContent = es ? 'No se pudo cargar el mapa. Usa la lista.' : 'Map unavailable. Please use the list.'; return; }
+  retailMap = L.map('retailMap', {scrollWheelZoom:false});
+  var tiles = L.tileLayer('https://maps.geoapify.com/v1/tile/osm-carto/{z}/{x}/{y}.png?apiKey=92d19d340f5442708f16ee88ee9e367a', {
+    maxZoom:19, attribution:'Powered by <a href="https://www.geoapify.com/">Geoapify</a> | <a href="https://www.openstreetmap.org/copyright">© OpenStreetMap contributors</a>'
+  }).addTo(retailMap);
+  tiles.on('tileerror', function () { var status = el('mapStatus'); if (status) status.textContent = es ? 'El fondo del mapa no está disponible. Usa la lista.' : 'Map background unavailable. Please use the list.'; });
+  locations.forEach(function (entry) {
+    var p = entry.pos;
+    var html = '<b>' + esc(p.name) + '</b><p>' + esc(p.address + ', ' + (es ? p.townEs : p.town)) + '</p>';
+    entry.brands.forEach(function (b) { html += '<p><a href="#/brand/' + esc(b.slug) + '">' + esc(b.name) + '</a></p>'; });
+    html += '<a href="' + esc(p.maps) + '" target="_blank" rel="noopener">' + (es ? 'Abrir en Google Maps' : 'Open in Google Maps') + '</a>';
+    L.marker([p.lat,p.lng], {title:p.name,alt:p.name,icon:L.divIcon({className:'retail-pin',html:'<span style="display:block;width:20px;height:20px;border:2px solid white;border-radius:50%;background:#7D7268;box-shadow:0 1px 5px #555"></span>',iconSize:[24,24],iconAnchor:[12,12]})}).addTo(retailMap).bindPopup(html);
+  });
+  if (place) { retailMap.fitBounds(L.circle([place.lat,place.lng], {radius:state.radius*1000}).getBounds()); }
+  else if (locations.length) retailMap.fitBounds(locations.map(function (e) { return [e.pos.lat,e.pos.lng]; }), {padding:[30,30],maxZoom:14});
+  else retailMap.setView([8.7,-80.1],7);
+}
+
 function viewNearby() {
   var s = t();
   var html =
     '<h1 class="page-title">' + esc(s.nearTitle) + '</h1>' +
     '<p class="page-sub">' + esc(s.nearSub) + '</p>' +
+    '<a class="btn btn-quiet" href="#/map">' + (state.lang === 'es' ? 'Ver mapa' : 'View map') + '</a>' +
     searchFormHTML({ hideProduct: true }) +
     footerHTML();
   render(html);
@@ -587,6 +630,8 @@ function viewResults() {
       '<span class="count">' + esc(s.resultCount(rows.length)) + '</span>' +
     '</div>' +
     '<p class="page-sub" style="margin-top:-8px">' + esc(sub.join(' · ')) + '</p>';
+
+  html += '<a class="btn btn-quiet" href="#/map">' + (state.lang === 'es' ? 'Ver mapa' : 'View map') + '</a>';
 
   if (!rows.length) {
     html += '<div class="empty"><h3>' + esc(s.noneTitle) + '</h3><p>' + esc(s.noneText) + '</p>';
@@ -908,7 +953,9 @@ function each(sel, fn) {
   for (var i = 0; i < nodes.length; i++) fn(nodes[i]);
 }
 
+var retailMap = null;
 function render(html) {
+  if (retailMap) { retailMap.remove(); retailMap = null; }
   var v = el('view');
   v.innerHTML = html;
   window.scrollTo(0, 0);
@@ -1204,6 +1251,7 @@ function route() {
     return viewResults();
   }
   if (h === '#/browse') return viewBrowse();
+  if (h === '#/map') return viewMap();
   if (h === '#/nearby') return viewNearby();
   if (h === '#/mission') return viewMission();
   if (h === '#/brands') return viewForBrands();
