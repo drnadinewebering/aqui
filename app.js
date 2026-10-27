@@ -837,10 +837,10 @@ function viewBrand(slug) {
 
   var pills = b.products.map(function (id) {
     var p = productById(id);
-    return p ? '<span class="pill">' + esc(nameOf(p)) + '</span>' : '';
+    return p ? '<li style="margin:0;padding:3px 0">' + esc(nameOf(p)) + '</li>' : '';
   }).join('');
   var productsHTML = pills
-    ? '<div class="sec"><h2>' + esc(s.productsLabel) + '</h2><div class="pills">' + pills + '</div></div>'
+    ? '<div class="sec"><h2>' + esc(s.productsLabel) + '</h2><ul style="list-style:none;margin:0;padding:0">' + pills + '</ul></div>'
     : '';
 
   /* Where to buy: a heading, then one row per point of sale, then Shipping in
