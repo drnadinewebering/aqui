@@ -357,24 +357,80 @@ function brandHeroHTML(b) {
 function exampleTagHTML(b) {
   return b.demo ? '<span class="tag example">' + esc(t().exampleTag) + '</span>' : '';
 }
-/* Full screen photo. One overlay, tap anywhere or press Escape to close. */
+/* Full-screen gallery: arrows, keyboard and horizontal touch gestures. */
+var photoGallery = [], photoIndex = 0, photoOpener = null, photoOverflow = '';
 function openPhoto(src, label) {
   closePhoto();
+  photoGallery = [];
+  each('[data-photo]', function (n) {
+    photoGallery.push({ src: n.getAttribute('data-photo'), label: n.getAttribute('aria-label') || '' });
+  });
+  photoIndex = photoGallery.findIndex(function (p) { return p.src === src; });
+  if (photoIndex < 0) { photoGallery = [{src:src,label:label || ''}]; photoIndex = 0; }
+  photoOpener = document.activeElement;
+  photoOverflow = document.body.style.overflow;
+  document.body.style.overflow = 'hidden';
   var box = document.createElement('div');
-  box.className = 'lightbox';
-  box.id = 'lightbox';
+  box.className = 'lightbox'; box.id = 'lightbox';
+  box.setAttribute('role','dialog'); box.setAttribute('aria-modal','true');
+  box.setAttribute('aria-label', state.lang === 'es' ? 'Galería de fotos' : 'Photo gallery');
+  var es = state.lang === 'es';
+  var navStyle = 'position:absolute;top:50%;transform:translateY(-50%);z-index:2;width:48px;height:48px;border:0;border-radius:50%;background:rgba(0,0,0,.65);color:white;font-size:32px;cursor:pointer;';
   box.innerHTML = '<button type="button" class="lb-close" aria-label="' + esc(t().closePhoto) + '">×</button>' +
-                  '<img src="' + esc(src) + '" alt="' + esc(label || '') + '">';
-  box.onclick = closePhoto;
+    '<img id="lb-image" style="touch-action:pan-y" draggable="false" alt="">' +
+    '<button type="button" id="lb-prev" style="' + navStyle + 'left:12px" aria-label="' + (es ? 'Foto anterior' : 'Previous photo') + '">‹</button>' +
+    '<button type="button" id="lb-next" style="' + navStyle + 'right:12px" aria-label="' + (es ? 'Foto siguiente' : 'Next photo') + '">›</button>' +
+    '<span id="lb-count" aria-live="polite" style="position:absolute;bottom:24px;left:50%;transform:translateX(-50%);color:white;background:rgba(0,0,0,.65);padding:4px 12px;border-radius:20px"></span>';
   document.body.appendChild(box);
+  box.querySelector('.lb-close').onclick = closePhoto;
+  el('lb-prev').onclick = function () { movePhoto(-1); };
+  el('lb-next').onclick = function () { movePhoto(1); };
+  box.onclick = function (e) { if (e.target === box) closePhoto(); };
+  var touchStart = null;
+  box.addEventListener('touchstart',function(e){
+    touchStart = e.touches.length === 1 ? {x:e.touches[0].clientX,y:e.touches[0].clientY} : null;
+  },{passive:true});
+  box.addEventListener('touchend',function(e){
+    if (!touchStart || !e.changedTouches.length) return;
+    var dx=e.changedTouches[0].clientX-touchStart.x, dy=e.changedTouches[0].clientY-touchStart.y;
+    touchStart=null;
+    if (Math.abs(dx)>50 && Math.abs(dx)>Math.abs(dy)*1.3) movePhoto(dx<0 ? 1 : -1);
+  },{passive:true});
+  box.addEventListener('touchcancel',function(){touchStart=null;},{passive:true});
+  movePhoto(0);
+  box.querySelector('.lb-close').focus();
   document.addEventListener('keydown', escClose);
+}
+function movePhoto(step) {
+  if (!photoGallery.length) return;
+  photoIndex = (photoIndex + step + photoGallery.length) % photoGallery.length;
+  var photo=photoGallery[photoIndex], image=el('lb-image');
+  image.src=photo.src; image.alt=photo.label;
+  el('lb-count').textContent=(photoIndex+1)+' / '+photoGallery.length;
+  el('lb-prev').hidden=el('lb-next').hidden=photoGallery.length<2;
 }
 function closePhoto() {
   var box = el('lightbox');
-  if (box && box.parentNode) box.parentNode.removeChild(box);
+  if (box && box.parentNode) {
+    box.parentNode.removeChild(box);
+    document.body.style.overflow=photoOverflow;
+    if (photoOpener && photoOpener.isConnected) photoOpener.focus();
+  }
   document.removeEventListener('keydown', escClose);
+  photoGallery=[]; photoOpener=null;
 }
-function escClose(e) { if (e.key === 'Escape') closePhoto(); }
+function escClose(e) {
+  if (e.key === 'Escape') { e.preventDefault(); closePhoto(); }
+  else if (e.key === 'ArrowLeft') { e.preventDefault(); movePhoto(-1); }
+  else if (e.key === 'ArrowRight') { e.preventDefault(); movePhoto(1); }
+  else if (e.key === 'Tab') {
+    var box=el('lightbox'); if (!box) return;
+    var buttons=Array.prototype.filter.call(box.querySelectorAll('button'),function(b){return !b.hidden;});
+    var first=buttons[0],last=buttons[buttons.length-1];
+    if (e.shiftKey && document.activeElement===first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement===last) { e.preventDefault(); first.focus(); }
+  }
+}
 
 /* straight line distance in km */
 function distance(a, b) {
