@@ -65,7 +65,8 @@
    points somewhere else. */
 
 /* Real retail locations: maintained once and shared by brand references.
-   Coordinates remain null until the exact pin has been verified.
+   Coordinates may be copied from Google Maps; positionVerified stays false
+   until the real-world location is confirmed.
    Brand-specific notes belong on the pos reference, not the location. */
 window.RETAIL_LOCATIONS = [
   {
@@ -77,9 +78,11 @@ window.RETAIL_LOCATIONS = [
     "province": "Panamá Oeste",
     "maps": "https://maps.app.goo.gl/LJbqV1a4M5hGajz98?g_st=ic",
     "sourceMaps": "https://maps.app.goo.gl/LJbqV1a4M5hGajz98?g_st=ic",
-    "lat": null,
-    "lng": null,
-    "positionVerified": false
+    "lat": 8.5440563,
+    "lng": -79.9126136,
+    "positionVerified": false,
+    "coordinateSource": "Google Maps place pin",
+    "coordinateCheckedAt": "2026-10-27"
   },
   {
     "id": "sizzle-spice",
@@ -90,9 +93,11 @@ window.RETAIL_LOCATIONS = [
     "province": "Panamá Oeste",
     "maps": "https://maps.app.goo.gl/BsJNpUoALse7hK98A?g_st=ic",
     "sourceMaps": "https://maps.app.goo.gl/BsJNpUoALse7hK98A?g_st=ic",
-    "lat": null,
-    "lng": null,
-    "positionVerified": false
+    "lat": 8.5647735,
+    "lng": -79.8921734,
+    "positionVerified": false,
+    "coordinateSource": "Google Maps place pin",
+    "coordinateCheckedAt": "2026-10-27"
   },
   {
     "id": "el-trapiche-bella-vista",
@@ -103,9 +108,11 @@ window.RETAIL_LOCATIONS = [
     "province": "Panamá",
     "maps": "https://maps.app.goo.gl/ksmS8cvxJqcm3jpMA?g_st=ic",
     "sourceMaps": "https://maps.app.goo.gl/ksmS8cvxJqcm3jpMA?g_st=ic",
-    "lat": null,
-    "lng": null,
-    "positionVerified": false
+    "lat": 8.9796218,
+    "lng": -79.5269585,
+    "positionVerified": false,
+    "coordinateSource": "Google Maps place pin",
+    "coordinateCheckedAt": "2026-10-27"
   }
 ];
 
