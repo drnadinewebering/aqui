@@ -1,10 +1,10 @@
 {
-  "id": "/aqui/",
+  "id": "/",
   "name": "aquí",
   "short_name": "aquí",
   "description": "Discover natural and locally made products in Panama.",
-  "start_url": "/aqui/#/",
-  "scope": "/aqui/",
+  "start_url": "/#/",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#FFFFFF",
   "theme_color": "#FFFFFF",
