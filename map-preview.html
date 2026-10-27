@@ -120,7 +120,7 @@ var STRINGS = {
     tabNear: 'Nearby',
     tabMission: 'Mission',
     nearTitle: 'What is nearby',
-    nearSub: 'Pick a place and see everything available there. No product needed.',
+    nearSub: 'Choose a place. See what’s nearby.\nNo product needed.',
     demoNote: 'Demo version. Brands marked "Example brand" are invented placeholders that show how the app works. Brands without that mark are real.',
     exampleTag: 'Example brand',
     forBrands: 'For Brands',
@@ -621,7 +621,7 @@ function viewNearby() {
   var s = t();
   var html =
     '<h1 class="page-title">' + esc(s.nearTitle) + '</h1>' +
-    '<p class="page-sub">' + esc(s.nearSub) + '</p>' +
+    '<p class="page-sub">' + esc(s.nearSub).replace(/\n/g, '<br>') + '</p>' +
     '<a class="btn" style="display:flex;align-items:center;justify-content:center;box-sizing:border-box;text-decoration:none;margin:0 0 20px" href="#/map">' + (state.lang === 'es' ? 'Ver mapa' : 'View map') + '</a>' +
     searchFormHTML({ hideProduct: true }) +
     footerHTML();
