@@ -64,6 +64,58 @@
    ignores anything blank, malformed or of the wrong kind, so no icon ever
    points somewhere else. */
 
+/* Real retail locations: maintained once and shared by brand references.
+   Coordinates may be copied from Google Maps; positionVerified means the coordinates match the Google pin supplied
+   and accepted by Nadine; it does not claim an on-site survey.
+   Brand-specific notes belong on the pos reference, not the location. */
+window.RETAIL_LOCATIONS = [
+  {
+    "id": "red-barn",
+    "name": "Red Barn",
+    "address": "Pan-American Hwy 41-31",
+    "town": "Las Lajas",
+    "townEs": "Las Lajas",
+    "province": "Panamá Oeste",
+    "maps": "https://maps.app.goo.gl/LJbqV1a4M5hGajz98?g_st=ic",
+    "sourceMaps": "https://maps.app.goo.gl/LJbqV1a4M5hGajz98?g_st=ic",
+    "lat": 8.5440563,
+    "lng": -79.9126136,
+    "positionVerified": true,
+    "coordinateSource": "Google Maps place pin",
+    "coordinateCheckedAt": "2026-10-27"
+  },
+  {
+    "id": "sizzle-spice",
+    "name": "Sizzle & Spice",
+    "address": "1011",
+    "town": "Nueva Gorgona",
+    "townEs": "Nueva Gorgona",
+    "province": "Panamá Oeste",
+    "maps": "https://maps.app.goo.gl/BsJNpUoALse7hK98A?g_st=ic",
+    "sourceMaps": "https://maps.app.goo.gl/BsJNpUoALse7hK98A?g_st=ic",
+    "lat": 8.5647735,
+    "lng": -79.8921734,
+    "positionVerified": true,
+    "coordinateSource": "Google Maps place pin",
+    "coordinateCheckedAt": "2026-10-27"
+  },
+  {
+    "id": "el-trapiche-bella-vista",
+    "name": "El Trapiche – Bella Vista",
+    "address": "Calle 51 Este",
+    "town": "Panama City",
+    "townEs": "Ciudad de Panamá",
+    "province": "Panamá",
+    "maps": "https://maps.app.goo.gl/ksmS8cvxJqcm3jpMA?g_st=ic",
+    "sourceMaps": "https://maps.app.goo.gl/ksmS8cvxJqcm3jpMA?g_st=ic",
+    "lat": 8.9796218,
+    "lng": -79.5269585,
+    "positionVerified": true,
+    "coordinateSource": "Google Maps place pin",
+    "coordinateCheckedAt": "2026-10-27"
+  }
+];
+
 window.BRANDS = [
   {
     slug: "fermentos-del-istmo",
@@ -534,11 +586,7 @@ window.BRANDS = [
     categories: ["living"],
     products: ["cutting-board", "serving-tray", "beer-carrier", "liquor-dispenser", "wine-rack", "custom-wood"],
     base: { town: "Las Palmas de Gorgona", townEs: "Las Palmas de Gorgona", province: "Panamá Oeste", lat: 8.5500, lng: -79.8833 },
-    pos: [
-      { name: "Taller Castel Woodshop", address: "Avenida Bella Vista, Lote U-01",
-        town: "Las Palmas de Gorgona, Chame", townEs: "Las Palmas de Gorgona, Chame", province: "Panamá Oeste",
-        lat: 8.5500, lng: -79.8833 }
-    ],
+    pos: [],
     shipping: { type: "nationwide", provinces: [] },
     links: { website: "", instagram: "castelwoodshop", whatsapp: "+507 6050 5505" },
     /* 2 Oct 2026: updated photos, hero and logo from Nadine's fixed set. The new
@@ -570,17 +618,7 @@ window.BRANDS = [
                "bug-repellent", "board-butter", "dishwasher-soap", "deodorant", "body-butter",
                "toothpaste", "foot-soak-salts", "essential-oil-roller", "home-care", "skincare"],
     base: { town: "El Volcán", townEs: "El Volcán", province: "Chiriquí", lat: 8.7833, lng: -82.6333 },
-    pos: [
-      { name: "Volcán Market", note: { en: "Every Friday", es: "Todos los viernes" },
-        town: "Volcán", townEs: "Volcán", province: "Chiriquí", lat: 8.7833, lng: -82.6333 },
-      { name: "Boquete Market", note: { en: "Every Tuesday", es: "Todos los martes" },
-        town: "Boquete", townEs: "Boquete", province: "Chiriquí", lat: 8.7800, lng: -82.4400 },
-      { name: "The Red Barn",
-        /* maps: Google Maps place page for Red Barn near Coronado (found 14 Oct 2026).
-           Any shop can get one. The row then opens and shows an Open in Google Maps link. */
-        maps: "https://www.google.com/maps/place/Red+Barn/@8.5440563,-79.9126136,17z/data=!3m1!4b1!4m6!3m5!1s0x8facef0061e03d49:0x5bf280c8ad82e151!8m2!3d8.5440563!4d-79.9126136",
-        town: "Coronado", townEs: "Coronado", province: "Panamá Oeste", lat: 8.5333, lng: -79.9500 }
-    ],
+    pos: [{"locationId":"red-barn"}],
     shipping: { type: "nationwide", provinces: [],
                 note: { en: "All over Panama via Uno Express and Fletes Chavales, or courier to Bocas del Toro",
                         es: "A todo Panamá con Uno Express y Fletes Chavales, o por courier a Bocas del Toro" } },
@@ -614,14 +652,7 @@ window.BRANDS = [
     categories: ["food"],
     products: ["jam", "spread", "healthy-snacks", "pesto", "chimichurri", "tomato-sauce",
                "dried-tomatoes", "hot-sauce", "apple-cider-vinegar", "kombucha", "bone-broth", "coffee-liqueur"],
-    pos: [
-      { name: "Sizzle & Spice", note: { en: "Gorgona Beach Plaza", es: "Gorgona Beach Plaza" },
-        town: "Gorgona", townEs: "Gorgona", province: "Panamá Oeste", lat: 8.5500, lng: -79.8833 },
-      { name: "El Trapiche", note: { en: "Bella Vista", es: "Bella Vista" },
-        town: "Panama City", townEs: "Ciudad de Panamá", province: "Panamá", lat: 8.9824, lng: -79.5199 }
-    ],
-    /* The form answers "Panamá (área metropolitana)". Only Panama City is in
-       places.js for now, so provinces lists Panamá. */
+    pos: [{"locationId":"sizzle-spice"},{"locationId":"el-trapiche-bella-vista"}],
     shipping: { type: "provinces", provinces: ["Panamá"],
                 note: { en: "Panama City metro area", es: "Panamá (área metropolitana)" } },
     /* From the brand's form: Instagram delisaludable.pa, WhatsApp (+507) 666 13469, and a
@@ -653,11 +684,7 @@ window.BRANDS = [
     },
     categories: ["food"],
     products: ["chocolate-bar", "ceremonial-cacao", "cacao-nibs", "brownie", "alfajor", "baking-chocolate"],
-    pos: [
-      { name: "The Red Barn",
-        maps: "https://www.google.com/maps/place/Red+Barn/@8.5440563,-79.9126136,17z/data=!3m1!4b1!4m6!3m5!1s0x8facef0061e03d49:0x5bf280c8ad82e151!8m2!3d8.5440563!4d-79.9126136",
-        town: "Coronado", townEs: "Coronado", province: "Panamá Oeste", lat: 8.5333, lng: -79.9500 }
-    ],
+    pos: [{"locationId":"red-barn"}],
     shipping: { type: "none", provinces: [] },
     links: { website: "", instagram: "ciagua.lab", whatsapp: "+507 6479 3976" },
     photo: "ciagua-1.jpg",
@@ -667,3 +694,13 @@ window.BRANDS = [
     published: true
   }
 ];
+
+/* Resolve real location references for profiles and search; demos stay separate. */
+window.BRANDS.forEach(function (brand) {
+  if (brand.demo) return;
+  brand.pos = brand.pos.map(function (ref) {
+    var location = window.RETAIL_LOCATIONS.find(function (p) { return p.id === ref.locationId; });
+    if (!location) throw new Error('Unknown retail location: ' + ref.locationId);
+    return Object.assign({}, location, ref);
+  });
+});
