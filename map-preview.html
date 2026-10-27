@@ -622,7 +622,7 @@ function viewNearby() {
   var html =
     '<h1 class="page-title">' + esc(s.nearTitle) + '</h1>' +
     '<p class="page-sub">' + esc(s.nearSub) + '</p>' +
-    '<a class="btn btn-quiet" style="display:flex;align-items:center;justify-content:center;box-sizing:border-box;text-decoration:none;margin:0 0 20px" href="#/map">' + (state.lang === 'es' ? 'Ver mapa' : 'View map') + '</a>' +
+    '<a class="btn" style="display:flex;align-items:center;justify-content:center;box-sizing:border-box;text-decoration:none;margin:0 0 20px" href="#/map">' + (state.lang === 'es' ? 'Ver mapa' : 'View map') + '</a>' +
     searchFormHTML({ hideProduct: true }) +
     footerHTML();
   render(html);
@@ -674,7 +674,7 @@ function viewResults() {
     '</div>' +
     '<p class="page-sub" style="margin-top:-8px">' + esc(sub.join(' · ')) + '</p>';
 
-  html += '<a class="btn btn-quiet" style="display:flex;align-items:center;justify-content:center;box-sizing:border-box;text-decoration:none;margin:0 0 20px" href="#/map">' + (state.lang === 'es' ? 'Ver mapa' : 'View map') + '</a>';
+  html += '<a class="btn" style="display:flex;align-items:center;justify-content:center;box-sizing:border-box;text-decoration:none;margin:0 0 20px" href="#/map">' + (state.lang === 'es' ? 'Ver mapa' : 'View map') + '</a>';
 
   if (!rows.length) {
     html += '<div class="empty"><h3>' + esc(s.noneTitle) + '</h3><p>' + esc(s.noneText) + '</p>';
