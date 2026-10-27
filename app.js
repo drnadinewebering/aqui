@@ -429,6 +429,7 @@ function search(q) {
   list.forEach(function (b) {
     var nearest = null;
     b.pos.forEach(function (p) {
+      if (p.positionVerified === false || typeof p.lat !== 'number' || typeof p.lng !== 'number') return;
       var d = distance(place, p);
       if (d <= q.radius && (!nearest || d < nearest.d)) nearest = { pos: p, d: d };
     });
@@ -751,7 +752,7 @@ function viewBrand(slug) {
   var rows = '';
   b.pos.forEach(function (p, i) {
     var sub = p.note ? nameOf(p.note) : townOf(p);
-    var mapsOk = /^https:\/\/(www\.)?google\.com\/maps\//.test(p.maps || '');
+    var mapsOk = /^https:\/\/((www\.)?google\.com\/maps\/|maps\.app\.goo\.gl\/)/.test(p.maps || '');
     var detail = (p.address || p.note || mapsOk)
       ? (p.address ? '<span>' + esc(p.address) + '</span>' : '') +
         '<span>' + esc(townOf(p) + ', ' + p.province) + '</span>' +
