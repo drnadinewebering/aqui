@@ -572,7 +572,7 @@ function viewHome() {
 
   CATEGORIES.slice(0, 4).forEach(function (c) { html += catTileHTML(c); });
   html += '</div>' +
-    '<button type="button" class="btn btn-quiet btn-chev" style="margin-top:13px" data-go="#/browse">' +
+    '<button type="button" class="btn btn-quiet btn-chev home-browse-all" style="margin-top:13px" data-go="#/browse">' +
       esc(s.browseAll) + chevronHTML('btn-chev-icon') + '</button>' +
     '<div style="margin-top:24px">' + searchFormHTML({}) + '</div>' +
     '<div class="demo-note">' + esc(s.demoNote) + '</div>' +
