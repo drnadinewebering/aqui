@@ -436,9 +436,13 @@ a.teaser{color:inherit;text-decoration:none}
 .map-link{display:inline-block;margin-top:8px;font-size:14px;font-weight:600;color:var(--btn);text-decoration:underline;text-underline-offset:3px}
 
 /* Homepage introduction only; shared page typography stays unchanged. */
+.home-positioning{
+  font:400 12px/1.5 var(--sans);letter-spacing:.08em;
+  color:#7D7268;text-align:left;margin:2px 0 8px;
+}
 .home-claim{
-  font:400 20px/1.3 Georgia,"Times New Roman",serif;
-  color:var(--ink);margin:2px 0 10px;
+  font:400 32px/1.2 Georgia,"Times New Roman",serif;
+  color:var(--ink);text-align:left;margin:0 0 10px;
 }
 .home-intro{
   font:400 16px/1.5 var(--sans);
