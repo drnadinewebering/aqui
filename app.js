@@ -566,8 +566,8 @@ function viewHome() {
     '<p class="home-claim">' + esc(s.tagline) + (state.lang === 'en' ? '.' : '') + '</p>' +
     '<p class="home-intro">' + esc(state.lang === 'es'
       ? 'Descubre productos naturales, marcas independientes y artesanos en Panamá. Explora lo que hay disponible, encuentra lo que buscas y descubre dónde conseguirlo.'
-      : "Discover natural products, independent brands and artisans in Panama. Explore what's available, find what you're looking for and discover where to get it.") + '</p>' +
-    '<div class="section-label">' + esc(s.browseTitle) + '</div>' +
+      : "Discover natural products, independent brands and artisans in Panama, and find out where to get their products.") + '</p>' +
+    '<div class="home-category-title">' + esc(state.lang === 'en' ? 'Browse by Category' : s.browseTitle) + '</div>' +
     '<div class="cat-grid">';
 
   CATEGORIES.slice(0, 4).forEach(function (c) { html += catTileHTML(c); });
