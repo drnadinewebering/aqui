@@ -185,6 +185,9 @@ var state = {
   placeText: '',
   radius: 25,
   shipping: false,
+  nearby: true,
+  homeSearch: false,
+  customPlace: null,
   geoMsg: '',
   locWarn: '',
   formHash: '#/'
@@ -222,6 +225,7 @@ function esc(s) {
 }
 function el(id) { return document.getElementById(id); }
 function placeById(id) {
+  if (state.customPlace && state.customPlace.id === id) return state.customPlace;
   for (var i = 0; i < PLACES.length; i++) if (PLACES[i].id === id) return PLACES[i];
   return null;
 }
@@ -464,11 +468,23 @@ function norm(s) {
  *   OR (shipping is on AND the brand ships to that province).
  *   Radius uses points of sale only, never the brand's own location.
  * ------------------------------------------------------------------ */
+function matchesSearchText(brand, text) {
+  var query = norm(String(text || '').trim());
+  if (!query) return true;
+  if (norm(brand.name).indexOf(query) > -1) return true;
+  return brand.products.some(function (id) {
+    var p = productById(id);
+    return p && (norm(p.en).indexOf(query) > -1 || norm(p.es).indexOf(query) > -1);
+  });
+}
 function search(q) {
   var list = BRANDS.filter(function (b) { return b.published; });
 
   if (q.productId) {
     list = list.filter(function (b) { return b.products.indexOf(q.productId) > -1; });
+  }
+  if (q.homeSearch && !q.productId && String(q.productText || '').trim()) {
+    list = list.filter(function (b) { return matchesSearchText(b, q.productText); });
   }
   if (q.categoryId) {
     list = list.filter(function (b) { return b.categories.indexOf(q.categoryId) > -1; });
@@ -477,6 +493,9 @@ function search(q) {
   var place = q.placeId ? placeById(q.placeId) : null;
 
   if (!place) {
+    if (q.nearby === false && q.shipping) {
+      list = list.filter(function (b) { return b.shipping && b.shipping.type !== 'none'; });
+    }
     return list.map(function (b) { return { brand: b, nearest: null, ships: false }; })
                .sort(function (a, b) { return a.brand.name.localeCompare(b.brand.name); });
   }
@@ -484,7 +503,7 @@ function search(q) {
   var out = [];
   list.forEach(function (b) {
     var nearest = null;
-    b.pos.forEach(function (p) {
+    (q.nearby === false ? [] : b.pos).forEach(function (p) {
       if (p.positionVerified === false || typeof p.lat !== 'number' || typeof p.lng !== 'number') return;
       var d = distance(place, p);
       if (d <= q.radius && (!nearest || d < nearest.d)) nearest = { pos: p, d: d };
@@ -560,6 +579,36 @@ function searchFormHTML(opts) {
   return html;
 }
 
+
+/* Homepage-only form. Nearby keeps its existing layout and controls. */
+function homeSearchFormHTML() {
+  var es = state.lang === 'es', s = t();
+  var html = '<section class="home-search" aria-labelledby="home-search-title">' +
+    '<h2 id="home-search-title" class="home-search-title">' + (es ? 'Encuentra lo que buscas' : 'Find what you&#39;re looking for') + '</h2>' +
+    '<div class="field"><label for="q">' + esc(s.whatLabel) + '</label><div class="input-wrap">' +
+    lineIcon('<circle cx="10.5" cy="10.5" r="6.3"/><path d="m15.4 15.4 5 5"/>') +
+    '<input type="text" id="q" class="with-icon" autocomplete="off" placeholder="' +
+    (es ? 'Producto o marca (opcional)' : 'Product or brand (optional)') + '" value="' + esc(state.productText) + '"></div><div id="acProduct"></div></div>' +
+    '<fieldset class="availability"><legend>' + (es ? '¿Cómo debe estar disponible?' : 'How should it be available?') + '</legend>' +
+    '<div class="field"><label for="loc">' + (es ? '¿Dónde?' : 'Where?') + '</label><div class="input-wrap">' + ICONS.pin +
+    '<input type="text" id="loc" class="with-icon" autocomplete="off" placeholder="' +
+    (es ? 'Introduce un lugar en Panamá' : 'Enter a location in Panama') + '" value="' + esc(state.placeText) + '"></div><div id="acPlace"></div>' +
+    '<button type="button" class="geo-btn" id="geoBtn">' + ICONS.pin + esc(s.useLocation) + '</button>' +
+    '<p class="geo-msg' + (state.locWarn ? ' warn' : '') + '" id="geoMsg" role="status">' +
+    esc(state.geoMsg || (es ? 'Elige una sugerencia o busca otro lugar en Panamá.' : 'Choose a suggestion or search another location in Panama.')) + '</p></div>' +
+    '<div class="availability-options"><div class="availability-row">' +
+    '<label class="availability-choice" for="nearbyToggle"><input type="checkbox" id="nearbyToggle"' + (state.nearby ? ' checked' : '') + '><span>' +
+    (es ? 'Disponible cerca' : 'Available nearby') + '</span></label>' +
+    '<div class="radius-select"><select id="radiusSelect" aria-label="' + (es ? 'Radio de búsqueda' : 'Search radius') + '"' + (state.nearby ? '' : ' disabled') + '>';
+  RADII.forEach(function (r) { html += '<option value="' + r + '"' + (r === state.radius ? ' selected' : '') + '>' + r + ' km</option>'; });
+  html += '</select>' + chevronHTML('radius-chevron') + '</div></div>' +
+    '<label class="availability-choice" for="shippingCheckbox"><input type="checkbox" id="shippingCheckbox"' + (state.shipping ? ' checked' : '') + '><span>' +
+    esc(s.shipTitle) + '</span></label></div></fieldset>' +
+    '<p id="availabilityMsg" class="geo-msg warn" role="status" hidden></p>' +
+    '<button type="button" class="btn" id="goBtn">' + esc(s.searchBtn) + '</button></section>';
+  return html;
+}
+
 function viewHome() {
   var s = t();
   var html =
@@ -574,7 +623,7 @@ function viewHome() {
   html += '</div>' +
     '<button type="button" class="btn btn-quiet btn-chev home-browse-all" style="margin-top:13px" data-go="#/browse">' +
       esc(s.browseAll) + chevronHTML('btn-chev-icon') + '</button>' +
-    '<div style="margin-top:24px">' + searchFormHTML({}) + '</div>' +
+    homeSearchFormHTML() +
     '<div class="demo-note">' + esc(s.demoNote) + '</div>' +
     /* 14 Oct 2026: the mission lives on Nadine's website. This card is the only
        way to it from the app, and it opens outside aquí. */
@@ -585,7 +634,7 @@ function viewHome() {
     footerHTML();
 
   render(html);
-  wireSearchForm();
+  wireSearchForm({ home: true });
   wireCatButtons();
   wireCatPhotos();
 }
@@ -596,7 +645,9 @@ function viewMap() {
   var locations = [];
   BRANDS.filter(function (b) { return b.published && !b.demo; }).forEach(function (b) {
     if (state.productId && b.products.indexOf(state.productId) < 0) return;
+    if (state.homeSearch && !state.productId && !matchesSearchText(b, state.productText)) return;
     if (state.categoryId && b.categories.indexOf(state.categoryId) < 0) return;
+    if (state.nearby === false && place && !shipsTo(b, place.province)) return;
     b.pos.forEach(function (p) {
       if (!p.positionVerified || typeof p.lat !== 'number' || typeof p.lng !== 'number') return;
       if (place && distance(place, p) > state.radius) return;
@@ -678,7 +729,7 @@ function viewResults() {
 
   var heading = prod ? nameOf(prod) : (cat ? nameOf(cat) : s.resultsTitle);
   var sub = [];
-  sub.push(place ? placeName(place) + ' · ' + state.radius + ' km' : s.anywhere);
+  sub.push(place ? placeName(place) + (state.nearby !== false ? ' · ' + state.radius + ' km' : '') : s.anywhere);
   if (state.shipping) sub.push(s.ships.toLowerCase());
 
   var html =
@@ -695,7 +746,7 @@ function viewResults() {
     html += '<div class="empty"><h3>' + esc(s.noneTitle) + '</h3><p>' + esc(s.noneText) + '</p>';
     var bigger = null;
     for (var i = 0; i < RADII.length; i++) if (RADII[i] > state.radius) { bigger = RADII[i]; break; }
-    if (place && bigger) {
+    if (place && state.nearby !== false && bigger) {
       html += '<button type="button" class="btn" data-widen="' + bigger + '">' +
                 esc(s.tryRadius(bigger)) + '</button>';
     }
@@ -737,7 +788,7 @@ function viewResults() {
   each('[data-clear]', function (n) {
     n.onclick = function () {
       state.productId = null; state.productText = '';
-      state.categoryId = null; state.shipping = false;
+      state.categoryId = null; state.shipping = false; state.nearby = true;
       location.hash = '#/';
     };
   });
@@ -1104,10 +1155,52 @@ function setLocWarn(kind) {
   }
 }
 
+
+/* Only unmatched, manually entered locations are sent to the existing map provider.
+   A country filter and explicit choice prevent silently using a wrong result. */
+async function lookupHomePlace() {
+  var input = el('loc'), box = el('acPlace'), go = el('goBtn'), msg = el('geoMsg');
+  var query = state.placeText.trim(), lang = state.lang;
+  go.disabled = true;
+  msg.textContent = lang === 'es' ? 'Buscando lugares en Panamá…' : 'Finding locations in Panama…';
+  var controller = new AbortController(), timer = setTimeout(function () { controller.abort(); }, 10000);
+  try {
+    var url = new URL('https://api.geoapify.com/v1/geocode/search');
+    url.search = new URLSearchParams({ text: query, filter: 'countrycode:pa', format: 'json', lang: lang, limit: '5', apiKey: '92d19d340f5442708f16ee88ee9e367a' }).toString();
+    var response = await fetch(url.href, { signal: controller.signal });
+    if (!response.ok) throw new Error('Place lookup unavailable');
+    var data = await response.json();
+    if (!input.isConnected || input.value.trim() !== query || state.lang !== lang) return;
+    var items = (data.results || []).filter(function (p) { return p.country_code === 'pa' && typeof p.lat === 'number' && typeof p.lon === 'number'; });
+    if (!items.length) { msg.textContent = lang === 'es' ? 'No se encontró este lugar. Prueba otro nombre en Panamá.' : 'Location not found. Try another name in Panama.'; return; }
+    box.innerHTML = '<div class="ac">' + items.map(function (p, i) {
+      return '<button type="button" data-remote-place="' + i + '">' + esc(p.formatted) + '</button>';
+    }).join('') + '</div>';
+    msg.textContent = lang === 'es' ? 'Selecciona el lugar correcto y pulsa Buscar.' : 'Select the correct location, then press Search.';
+    each('[data-remote-place]', function (button) {
+      button.onclick = function () {
+        var p = items[parseInt(button.getAttribute('data-remote-place'), 10)];
+        var provinces = PLACES.map(function (place) { return place.province; });
+        var province = provinces.find(function (name) { return norm(p.state || '').replace(/^provincia de /, '') === norm(name); });
+        if (!province && norm(p.state || '').indexOf('panama oeste') > -1) province = 'Panamá Oeste';
+        if (!province && norm(p.state || '').indexOf('panama') > -1) province = 'Panamá';
+        state.customPlace = { id: 'custom-place', en: p.formatted, es: p.formatted, province: province || p.state || '', lat: p.lat, lng: p.lon };
+        state.placeId = 'custom-place'; state.placeText = p.formatted;
+        input.value = p.formatted; box.innerHTML = ''; state.locWarn = '';
+        msg.textContent = lang === 'es' ? 'Ubicación seleccionada.' : 'Location selected.';
+      };
+    });
+  } catch (_) {
+    if (input.isConnected && input.value.trim() === query) msg.textContent = lang === 'es' ? 'No se pudo buscar este lugar. Elige una sugerencia conocida o inténtalo de nuevo.' : 'Location lookup unavailable. Choose a known suggestion or try again.';
+  } finally { clearTimeout(timer); if (go.isConnected) go.disabled = false; }
+}
+
 function wireSearchForm(opts) {
   opts = opts || {};
   var s = t();
   state.formHash = location.hash || '#/';
+  state.homeSearch = !!opts.home;
+  if (!opts.home) state.nearby = true;
 
   if (!opts.hideProduct) {
     autocomplete('q', 'acProduct', function (q) {
@@ -1127,17 +1220,22 @@ function wireSearchForm(opts) {
          language's names come after those. Equal ranks keep the list order.
          So "jam" suggests Jam & Marmalade before Hibiscus Tea (whose Spanish
          name, flor de Jamaica, also contains it). */
+      if (opts.home) BRANDS.forEach(function (b) {
+        if (b.published && norm(b.name).indexOf(q) > -1) {
+          out.push({ id: b.slug, brand: true, label: b.name, n: out.length, rank: -1 });
+        }
+      });
       out.sort(function (a, b) { return a.rank - b.rank || a.n - b.n; });
       return out;
     }, function (it) {
-      state.productId = it.id;
+      state.productId = it.brand ? null : it.id;
       state.productText = it.label;
     });
 
     var qi = el('q');
     if (qi) qi.addEventListener('input', function () {
       state.productText = qi.value;
-      if (!qi.value.trim()) state.productId = null;
+      state.productId = null;
     });
   }
 
@@ -1158,7 +1256,8 @@ function wireSearchForm(opts) {
     /* Say so right away when nothing in the list matches what was typed. */
     state.geoMsg = '';
     var typedNow = norm(li.value.trim());
-    setLocWarn(typedNow && !findPlaces(typedNow).length ? 'notFound' : '');
+    state.customPlace = null;
+    setLocWarn(!opts.home && typedNow && !findPlaces(typedNow).length ? 'notFound' : '');
     if (!li.value.trim()) { try { localStorage.removeItem('aqui.place'); } catch (e) {} }
   });
 
@@ -1213,11 +1312,50 @@ function wireSearchForm(opts) {
     };
   }
 
+  var near = el('nearbyToggle'), shipping = el('shippingCheckbox'), radius = el('radiusSelect');
+  if (near) near.onchange = function () {
+    state.nearby = near.checked;
+    radius.disabled = !near.checked;
+    el('availabilityMsg').hidden = true;
+  };
+  if (shipping) shipping.onchange = function () {
+    state.shipping = shipping.checked;
+    el('availabilityMsg').hidden = true;
+  };
+  if (radius) radius.onchange = function () {
+    state.radius = parseInt(radius.value, 10);
+    store('radius', state.radius);
+  };
   var go = el('goBtn');
-  if (go) go.onclick = function () {
+  if (go) go.onclick = async function () {
+    if (opts.home) {
+      state.categoryId = null;
+      if (!state.nearby && !state.shipping) {
+        el('availabilityMsg').textContent = state.lang === 'es' ? 'Selecciona al menos una opción de disponibilidad.' : 'Select at least one availability option.';
+        el('availabilityMsg').hidden = false;
+        return;
+      }
+      if (!state.placeId && state.placeText.trim()) {
+        var exact = PLACES.find(function (p) {
+          return norm(p.en) === norm(state.placeText.trim()) || norm(p.es) === norm(state.placeText.trim()) ||
+            (p.alias || []).some(function (alias) { return norm(alias) === norm(state.placeText.trim()); });
+        });
+        if (exact) { state.placeId = exact.id; state.placeText = placeName(exact); }
+        else {
+          await lookupHomePlace();
+          return; // Ask the user to select the actual location before searching.
+        }
+      }
+    }
     if (opts.hideProduct) { state.productId = null; state.productText = ''; state.categoryId = null; }
     location.hash = '#/results';
   };
+  if (opts.home) ['q', 'loc'].forEach(function (id) {
+    var input = el(id);
+    if (input) input.addEventListener('keydown', function (event) {
+      if (event.key === 'Enter') { event.preventDefault(); go.click(); }
+    });
+  });
 }
 
 /* ------------------------------------------------------------------ *
