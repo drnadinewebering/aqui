@@ -616,7 +616,8 @@ function viewHome() {
     '<p class="home-positioning">' + esc(state.lang === 'es'
       ? 'PRODUCTOS NATURALES Y MARCAS INDEPENDIENTES'
       : 'NATURAL PRODUCTS & INDEPENDENT BRANDS') + '</p>' +
-    '<p class="home-claim">' + esc(s.tagline) + (state.lang === 'en' ? '.' : '') + '</p>' +
+    '<div class="home-logo-claim"><img class="home-logo" src="home-logo.svg" alt="aquí">' +
+      '<p class="home-claim">' + esc(s.tagline) + (state.lang === 'en' ? '.' : '') + '</p></div>' +
     '<p class="home-intro">' + esc(state.lang === 'es'
       ? 'Explora una selección de productos de marcas independientes y artesanos de todo Panamá, y descubre dónde conseguirlos.'
       : "Explore curated products from independent brands and artisans across Panama, and find out where to get them.") + '</p>' +
@@ -1068,6 +1069,7 @@ function each(sel, fn) {
 
 var retailMap = null;
 function render(html) {
+  document.body.classList.toggle('home-page', !location.hash || location.hash === '#/');
   if (retailMap) { retailMap.remove(); retailMap = null; }
   var v = el('view');
   v.innerHTML = html;
