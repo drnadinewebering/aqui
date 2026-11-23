@@ -523,3 +523,14 @@ a.teaser{color:inherit;text-decoration:none}
 .home-search .ac button:hover,
 .home-search .ac button:focus-visible{background:var(--paper-2)}
 .home-search .btn:disabled{opacity:.6;cursor:wait}
+
+/* Homepage-only logo relocation. Preserve header controls and their positions. */
+.home-page .topbar .brandmark{display:none}
+.home-page .topbar{min-height:70px;justify-content:flex-end}
+.home-logo-claim{display:flex;align-items:center;gap:14px;margin:0 0 10px}
+.home-logo{display:block;width:88px;height:88px;flex:none;border-radius:50%}
+.home-logo-claim .home-claim{flex:1;min-width:0;margin:0}
+@media(max-width:359px){
+  .home-logo-claim{gap:10px}
+  .home-logo{width:72px;height:72px}
+}
