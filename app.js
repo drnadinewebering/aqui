@@ -583,19 +583,20 @@ function searchFormHTML(opts) {
 /* Homepage-only form. Nearby keeps its existing layout and controls. */
 function homeSearchFormHTML() {
   var es = state.lang === 'es', s = t();
-  var html = '<section class="home-search" aria-labelledby="home-search-title">' +
+  var html = '<section class="home-search-section" aria-labelledby="home-search-title">' +
     '<h2 id="home-search-title" class="home-search-title">' + (es ? 'Encuentra lo que buscas' : 'Find what you&#39;re looking for') + '</h2>' +
+    '<div class="home-search">' +
     '<div class="field"><label for="q">' + esc(s.whatLabel) + '</label><div class="input-wrap">' +
     lineIcon('<circle cx="10.5" cy="10.5" r="6.3"/><path d="m15.4 15.4 5 5"/>') +
     '<input type="text" id="q" class="with-icon" autocomplete="off" placeholder="' +
-    (es ? 'Producto o marca (opcional)' : 'Product or brand (optional)') + '" value="' + esc(state.productText) + '"></div><div id="acProduct"></div></div>' +
-    '<fieldset class="availability"><legend>' + (es ? '¿Cómo debe estar disponible?' : 'How should it be available?') + '</legend>' +
+    (es ? 'Buscar productos o marcas' : 'Search products or brands') + '" value="' + esc(state.productText) + '"></div><div id="acProduct"></div></div>' +
     '<div class="field"><label for="loc">' + (es ? '¿Dónde?' : 'Where?') + '</label><div class="input-wrap">' + ICONS.pin +
     '<input type="text" id="loc" class="with-icon" autocomplete="off" placeholder="' +
     (es ? 'Introduce un lugar en Panamá' : 'Enter a location in Panama') + '" value="' + esc(state.placeText) + '"></div><div id="acPlace"></div>' +
     '<button type="button" class="geo-btn" id="geoBtn">' + ICONS.pin + esc(s.useLocation) + '</button>' +
     '<p class="geo-msg' + (state.locWarn ? ' warn' : '') + '" id="geoMsg" role="status">' +
     esc(state.geoMsg || (es ? 'Elige una sugerencia o busca otro lugar en Panamá.' : 'Choose a suggestion or search another location in Panama.')) + '</p></div>' +
+    '<fieldset class="availability"><legend>' + (es ? '¿Cómo debe estar disponible?' : 'How should it be available?') + '</legend>' +
     '<div class="availability-options"><div class="availability-row">' +
     '<label class="availability-choice" for="nearbyToggle"><input type="checkbox" id="nearbyToggle"' + (state.nearby ? ' checked' : '') + '><span>' +
     (es ? 'Disponible cerca' : 'Available nearby') + '</span></label>' +
@@ -605,7 +606,7 @@ function homeSearchFormHTML() {
     '<label class="availability-choice" for="shippingCheckbox"><input type="checkbox" id="shippingCheckbox"' + (state.shipping ? ' checked' : '') + '><span>' +
     esc(s.shipTitle) + '</span></label></div></fieldset>' +
     '<p id="availabilityMsg" class="geo-msg warn" role="status" hidden></p>' +
-    '<button type="button" class="btn" id="goBtn">' + esc(s.searchBtn) + '</button></section>';
+    '<button type="button" class="btn" id="goBtn">' + esc(s.searchBtn) + '</button></div></section>';
   return html;
 }
 
