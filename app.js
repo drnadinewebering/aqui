@@ -564,9 +564,6 @@ function viewHome() {
   var s = t();
   var html =
     '<p class="page-sub" style="margin-top:2px">' + esc(s.tagline) + '</p>' +
-    '<div class="hero-photo"><img src="home-hero-wide.jpg" alt=""></div>' +
-    '<div class="demo-note">' + esc(s.demoNote) + '</div>' +
-    searchFormHTML({}) +
     '<div class="section-label">' + esc(s.browseTitle) + '</div>' +
     '<div class="cat-grid">';
 
@@ -574,6 +571,8 @@ function viewHome() {
   html += '</div>' +
     '<button type="button" class="btn btn-quiet btn-chev" style="margin-top:13px" data-go="#/browse">' +
       esc(s.browseAll) + chevronHTML('btn-chev-icon') + '</button>' +
+    '<div style="margin-top:24px">' + searchFormHTML({}) + '</div>' +
+    '<div class="demo-note">' + esc(s.demoNote) + '</div>' +
     /* 14 Oct 2026: the mission lives on Nadine's website. This card is the only
        way to it from the app, and it opens outside aquí. */
     '<a class="teaser" href="' + esc(CONTENT.missionUrl) + '" target="_blank" rel="noopener">' +
