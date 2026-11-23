@@ -36,3 +36,64 @@ window.addEventListener('beforeinstallprompt',function(event){event.preventDefau
 window.addEventListener('appinstalled',function(){installed=true;deferred=null;paint();dialog.close();});
 paint();
 })();
+
+/* Release updates: bump aqui-release in index.html AND version every local
+   script/stylesheet whenever publishing changes. Do not remove this checker. */
+(function () {
+'use strict';
+var meta = document.querySelector('meta[name="aqui-release"]');
+if (!meta) return;
+var current = meta.content;
+var busy = false, pending = null, edited = false, notice = null;
+document.addEventListener('input', function () { edited = true; }, true);
+document.addEventListener('change', function () { edited = true; }, true);
+function reloadRelease() {
+  if (!pending) return;
+  var key = 'aqui-update-' + pending;
+  try {
+    if (sessionStorage.getItem(key)) return;
+    sessionStorage.setItem(key, '1');
+  } catch (_) { /* Storage may be unavailable. The release comparison still applies. */ }
+  var url = new URL(window.location.href);
+  url.searchParams.set('release', pending);
+  window.location.replace(url.href);
+}
+function offerUpdate() {
+  if (notice) return;
+  notice = document.createElement('button');
+  notice.type = 'button';
+  notice.className = 'btn';
+  notice.textContent = document.documentElement.lang === 'es'
+    ? 'Nueva versión disponible. Actualizar'
+    : 'New version available. Update';
+  notice.style.cssText = 'position:fixed;top:12px;left:16px;right:16px;z-index:10000;max-width:600px;margin:0 auto;box-shadow:0 2px 12px #0003';
+  notice.onclick = reloadRelease;
+  document.body.appendChild(notice);
+}
+async function checkRelease() {
+  if (busy || document.visibilityState === 'hidden' || navigator.onLine === false) return;
+  busy = true;
+  try {
+    var url = new URL('index.html', document.baseURI);
+    url.searchParams.set('update-check', Date.now().toString());
+    var response = await fetch(url.href, {cache:'no-store', credentials:'same-origin'});
+    if (!response.ok) return;
+    var page = new DOMParser().parseFromString(await response.text(), 'text/html');
+    var next = page.querySelector('meta[name="aqui-release"]');
+    if (!next || !/^[a-zA-Z0-9._-]+$/.test(next.content) || next.content === current) return;
+    pending = next.content;
+    // Never interrupt searches, forms, galleries, or another detail page.
+    var home = !location.hash || location.hash === '#/' || location.hash === '#';
+    var dialogOpen = document.querySelector('dialog[open], [aria-modal="true"]');
+    var typing = document.activeElement && /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName);
+    if (home && !edited && !dialogOpen && !typing) reloadRelease();
+    else offerUpdate();
+  } catch (_) { /* Keep the current app usable offline or if a check fails. */ }
+  finally { busy = false; }
+}
+window.addEventListener('pageshow', checkRelease);
+window.addEventListener('online', checkRelease);
+document.addEventListener('visibilitychange', checkRelease);
+setInterval(checkRelease, 60000);
+checkRelease();
+})();
