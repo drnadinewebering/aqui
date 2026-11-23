@@ -612,10 +612,13 @@ function homeSearchFormHTML() {
 function viewHome() {
   var s = t();
   var html =
+    '<p class="home-positioning">' + esc(state.lang === 'es'
+      ? 'PRODUCTOS NATURALES Y MARCAS INDEPENDIENTES'
+      : 'NATURAL PRODUCTS & INDEPENDENT BRANDS') + '</p>' +
     '<p class="home-claim">' + esc(s.tagline) + (state.lang === 'en' ? '.' : '') + '</p>' +
     '<p class="home-intro">' + esc(state.lang === 'es'
-      ? 'Descubre productos naturales, marcas independientes y artesanos en Panamá. Explora lo que hay disponible, encuentra lo que buscas y descubre dónde conseguirlo.'
-      : "Discover natural products, independent brands and artisans in Panama, and find out where to get their products.") + '</p>' +
+      ? 'Explora una selección de productos de marcas independientes y artesanos de todo Panamá, y descubre dónde conseguirlos.'
+      : "Explore curated products from independent brands and artisans across Panama, and find out where to get them.") + '</p>' +
     '<div class="home-category-title">' + esc(state.lang === 'en' ? 'Browse by Category' : s.browseTitle) + '</div>' +
     '<div class="cat-grid">';
 
